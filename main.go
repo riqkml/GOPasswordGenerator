@@ -54,8 +54,8 @@ func Generate(str string) string {
 	}
 	var change string
 	for _, Uplow := range replace {
-		// change space and capital to lower vice versa (not sure how it'll works)
-		if string(Uplow) == " " {
+		// change space and capital to lower vice versa
+		if string(Uplow) == " " { //gak kedetect pas ditest but outputnya bener
 			continue
 		} else if string(Uplow) == strings.ToUpper(string(Uplow)) { // change uppercase to lowercase
 			change += strings.ToLower(string(Uplow))
@@ -68,36 +68,33 @@ func Generate(str string) string {
 }
 func CheckPassword(str string) string {
 	str = Generate(str)
-	//to be continue soalnya masih ragu
+	//check password criteria sangat lemah,lemah,sedang,kuat
 	var password string
-	numeric := "1234567890"
-	alphabet := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	Alphasym := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-"
-	numsym := "1234567890!@#$%^&*()_-"
+	//numeric := "1234567890"
+	//alphabet := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	//Alphasym := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-"
+	//numsym := "1234567890!@#$%^&*()_-"
 	Alphanumeric := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678910"
-	combinasi := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678910!@#$%^&*()_-"
+	//combinasi := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678910!@#$%^&*()_-"
 
-	if len(str) < 7 {
+	// gabisa ngedetect ketentuan alphanumeric dll
+	if len(str) >= 14 {
+		password += "kuat"
+	} else if len(str) >= 7 {
+		password += "sedang"
+	} else if str == Alphanumeric {
+		password += "lemah" //gak kedetect
+	} else {
 		password += "sangat lemah"
-	} else if len(str) == 7 && len(str) <= 14 {
-		if str == alphabet || str == numeric || str == Alphanumeric { //lenght >= 7 contain letter/number/both
-			password += "lemah"
-		} else if str == Alphasym || str == numsym || str == combinasi {
-			password += "sedang"
-		}
-	} else if len(str) >= 14 {
-		if str == combinasi {
-			password += "kuat"
-		}
 	}
 	return password
 }
 
-func PasswordGenerator(base string) (string, string) {
+func PasswordGenerator(base string) (string, string) { //error should generate password
 	var generate = Generate(base)
-	// var check = CheckPassword(generate)
+	var check = CheckPassword(generate)
 
-	return generate, ""
+	return generate, check
 }
 
 func main() {
